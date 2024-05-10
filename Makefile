@@ -2,7 +2,7 @@ MAIN_CLASS = SchedulingSimulation
 MAIN_CLASSFILE = bin/$(MAIN_CLASS).class
 
 DEPS = DrinkOrder Barman Patron
-DEPS_CLASSFILES = $(DEPS:%=$(BINDIR)/%.class)
+DEPS_CLASSFILES = $(DEPS:%=bin/%.class)
 
 $(MAIN_CLASSFILE): $(DEPS_CLASSFILES)
 
