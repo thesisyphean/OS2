@@ -1,3 +1,4 @@
+# This allows commandline arguments to be passed through make
 # If the first argument is "run"...
 ifeq (run,$(firstword $(MAKECMDGOALS)))
   # use the rest as arguments for "run"
@@ -12,6 +13,7 @@ MAIN_CLASSFILE = bin/$(MAIN_CLASS).class
 DEPS = DrinkOrder Barman Patron
 DEPS_CLASSFILES = $(DEPS:%=bin/%.class)
 
+# Main classfile depends on the dependencies
 $(MAIN_CLASSFILE): $(DEPS_CLASSFILES)
 
 bin/%.class: src/%.java

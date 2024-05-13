@@ -16,21 +16,6 @@ public class Barman extends Thread {
 	private CountDownLatch startSignal;
 	private BlockingQueue<DrinkOrder> orderQueue;
 
-	// This allows the barman to store how much of a drink has been completed
-	// before moving onto another drink, and return to a previous one
-	private class PartialDrinkOrder extends DrinkOrder {
-		private int remainingPrepTime;
-
-		PartialDrinkOrder(int patron) {
-			super(patron);
-			remainingPrepTime = getExecutionTime();
-		}
-
-		public void reducePrepTime(int executedPrepTime) {
-			this.remainingPrepTime -= executedPrepTime;
-		}
-	}
-
 	// This comparator will allow us to order drinks in the priority queue by
 	// execution time
 	class DrinkOrderComparator implements Comparator<DrinkOrder> {
@@ -46,7 +31,8 @@ public class Barman extends Thread {
 		if (schedAlg == 0 || schedAlg == 2)
 			this.orderQueue = new LinkedBlockingQueue<DrinkOrder>();
 		else if (schedAlg == 1) {
-			// Allows us to order the drinks by execution time and perform quicker drinks first
+			// Allows us to order the drinks by execution time and perform quicker drinks
+			// first
 			this.orderQueue = new PriorityBlockingQueue<DrinkOrder>(100, new DrinkOrderComparator());
 		} else {
 			throw new IllegalArgumentException("Scheduling algorithm must be within 0, 2 inclusive");
@@ -56,13 +42,11 @@ public class Barman extends Thread {
 	}
 
 	public void placeDrinkOrder(DrinkOrder order) throws InterruptedException {
-		if (schedAlg == 2) {
-			// We wrap the drink in the partial class
-			orderQueue.put(new PartialDrinkOrder(-1));
-			// I'd love to get the patron, but I can't edit the code to make it accessible
-		} else {
-			orderQueue.put(order);
-		}
+		if (schedAlg == 2)
+			// Set the remaining prep time so later we can decrease it for the round robin
+			// alg.
+			order.initRemainingPrepTime();
+		orderQueue.put(order);
 	}
 
 	public void run() {
@@ -81,18 +65,20 @@ public class Barman extends Thread {
 					System.out.println("---Barman has made order for patron " + nextOrder.toString());
 					nextOrder.orderDone();
 				} else {
-					PartialDrinkOrder partialnextOrder = (PartialDrinkOrder) nextOrder;
 					// Check if we can complete the drink in a single quantum
-					if (partialnextOrder.remainingPrepTime <= roundRobinQuantum) {
-						sleep(partialnextOrder.remainingPrepTime);
+					int remainder = nextOrder.getRemainingPrepTime();
+					if (remainder <= roundRobinQuantum) {
+						sleep(remainder);
 						System.out.println("---Barman has made order for patron " + nextOrder.toString());
 						nextOrder.orderDone();
 					} else {
 						// Otherwise we execute for a quantum and move on
 						sleep(roundRobinQuantum);
-						partialnextOrder.reducePrepTime(roundRobinQuantum);
+						System.out.println(
+								"---Barman continued " + nextOrder.toString() + " and has moved onto another drink");
+						nextOrder.reduceRemainingPrepTime(roundRobinQuantum);
 						// We add it back to the queue so we can retrieve it in order later
-						orderQueue.add(partialnextOrder);
+						orderQueue.add(nextOrder);
 					}
 				}
 			}

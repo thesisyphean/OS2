@@ -2,6 +2,20 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DrinkOrder {
+    // This is a simple addition to keep track of partially-completed drinks
+    private int remainingPrepTime;
+
+    public void initRemainingPrepTime() {
+        remainingPrepTime = getExecutionTime();
+    }
+
+    public int getRemainingPrepTime() {
+        return remainingPrepTime;
+    }
+
+    public void reduceRemainingPrepTime(int timeSpent) {
+        remainingPrepTime -= timeSpent;
+    }
 
     // DO NOT change the code below
     public enum Drink {

@@ -22,19 +22,20 @@ public class SchedulingSimulation {
 	}
 
 	public static void main(String[] args) throws InterruptedException, IOException {
-		// deal with command line arguments if provided
+		// deal with commandline arguments if provided
 		if (args.length >= 1) {
 			noPatrons = Integer.parseInt(args[0]); // total people to enter room
 		}
-		
+
 		if (args.length >= 2) {
 			sched = Integer.parseInt(args[1]);
 		}
 
 		// Get the file to output to from the commandline if possible
-		writer = new FileWriter("dat/default.csv", false);
 		if (args.length >= 3) {
 			writer = new FileWriter("dat/" + args[2] + ".csv", false);
+		} else {
+			writer = new FileWriter("dat/default.csv", false);
 		}
 		writer.write("ID,ArrivalTime,TotalTime,TurnaroundAvg,WaitingTime,ResponseTime\n");
 		Patron.fileW = writer;
