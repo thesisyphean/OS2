@@ -11,3 +11,5 @@ The CPU is seen as a barman, taking drink orders (tasks) from patrons (processes
 `make` can be used to compile the code, followed by `make run` to execute it. Commandline arguments can be passed through `make` like so: `make run <number_of_patrons> <scheduling_algorithm> <output_filename>`, where `<scheduling_algorithm>` should be 0 for FCFS, 1 for SJF and 2 for RR. The output files will be saved to the `dat` directory.
 
 `plot.py` has been created to plot the data. Run with no commandline arguments, it will plot all of the necessary graphs. Run as `plot.py execute`, it will run the experiment for various numbers of patrons, algorithms and iterations.
+
+Note that there are more commandline arguments that can be provided, but these are *optional*. The same arguments that would have been provided to the original program will work with this version.
