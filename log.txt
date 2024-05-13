@@ -1,0 +1,41 @@
+commit 40f288790bdbb90ff601d5d3e54a949ea5248ed0
+Author: TheSisyphean <thesisyphean256@gmail.com>
+Date:   Mon May 13 22:33:58 2024 +0200
+
+    Basic revisions, added most plots
+
+commit 360afd33219ae6390f5330f8d2b0d5fe572b3b5c
+Author: TheSisyphean <thesisyphean256@gmail.com>
+Date:   Sun May 12 23:06:15 2024 +0200
+
+    Miscellaneous additions
+
+commit b70c99e42f97175c1c37b563032b1491109a7a7c
+Author: TheSisyphean <thesisyphean256@gmail.com>
+Date:   Fri May 10 17:30:22 2024 +0200
+
+    Updated Makefile and fixed plot.py
+
+commit 210d6a58507737012c0b8dce7db7900a516d10dd
+Author: TheSisyphean <thesisyphean256@gmail.com>
+Date:   Fri May 10 09:18:42 2024 +0200
+
+    Added plot.py
+
+commit 8e9bf6843db104b6c4303ea85761979812beb830
+Author: thesisyphean <thesisyphean256@gmail.com>
+Date:   Thu May 9 21:57:27 2024 +0200
+
+    Removed packages
+
+commit 891541eca51973c050c898b723e3e140a6e733d9
+Author: thesisyphean <thesisyphean256@gmail.com>
+Date:   Thu May 9 21:30:58 2024 +0200
+
+    Added README.md
+
+commit e4f8c84e701437f71d40849e43c61c9fa3ce1857
+Author: thesisyphean <thesisyphean256@gmail.com>
+Date:   Thu May 9 21:27:05 2024 +0200
+
+    Initial commit

@@ -9,8 +9,8 @@ ALGORITHMS = ["FCFS", "SJF", "RR"]
 NAMES = ["First-Come-First-Served", "Shortest-Job-First", "Round Robin"]
 PATRONS = [50, 100, 200]
 ITERATIONS = 3
-VARIABLES = ["TurnaroundAvg", "WaitingTime", "ResponseTime"]
-VAR_NAMES = ["Tunaround Time", "Waiting Time", "Response Time"]
+VARIABLES = ["TurnaroundAvg", "WaitingTime", "ResponseTime", "Throughput"]
+VAR_NAMES = ["Tunaround Time", "Waiting Time", "Response Time", "Throughput"]
 
 
 def main():
@@ -24,12 +24,14 @@ def main():
         "TurnaroundAvg": {50: [], 100: [], 200: []},
         "WaitingTime": {50: [], 100: [], 200: []},
         "ResponseTime": {50: [], 100: [], 200: []},
+        "Throughput": {50: [], 100: [], 200: []},
     }
 
     stds = {
         "TurnaroundAvg": {50: [], 100: [], 200: []},
         "WaitingTime": {50: [], 100: [], 200: []},
         "ResponseTime": {50: [], 100: [], 200: []},
+        "Throughput": {50: [], 100: [], 200: []},
     }
 
     # Calculate all of the averages and standard deviations
@@ -42,6 +44,7 @@ def main():
             ]
             # Join all iterations
             df = pd.concat(dfs, ignore_index=True)
+            df["Throughput"] = df["ArrivalTime"] + df["TotalTime"]
 
             for variable in VARIABLES:
                 averages[variable][patron_num].append(df[variable].mean())
@@ -56,6 +59,8 @@ def main():
         dfs = [pd.read_csv(f"dat/{algorithm}_100_{j}.csv") for j in range(ITERATIONS)]
         # Concatenate them to dilute outliers
         df = pd.concat(dfs, ignore_index=True)
+        # This is actually just endtime, but for the framework, we're calling it throughput
+        df["Throughput"] = df["ArrivalTime"] + df["TotalTime"]
 
         for j in range(len(VARIABLES)):
             plt.cla()
@@ -86,26 +91,6 @@ def main():
 
             filename = f"{variable} for {algorithm}"
             plt.savefig(f"plt/{filename}.png", bbox_inches="tight", dpi=100)
-
-        # Determining throughput
-        # We find the max end time, divide it by 10 to create 10 logical sections
-        # Then find the number of patrons that left in each logical section
-        # sdf = dfs[0]
-        # sdf["EndTime"] = sdf["ArrivalTime"] + sdf["TotalTime"]
-        # Size of each logical section
-        # cutoff = sdf["EndTime"].max() / 10.0
-
-        # Logical sections
-        # sdf["Split"] = pd.cut(sdf["EndTime"], bins=range(0, sdf["EndTime"].max(), int(cutoff)), right=False)
-        # Number of processes ended in each section
-        # split_counts = sdf["Split"].value_counts().sort_index()
-        # print(split_counts)
-        # sns.barplot(x=split_counts.index, y=split_counts.values)
-        # plt.xlabel('Chunk')
-        # plt.ylabel('Number of End Times')
-        # plt.ylim(0, 10)
-        # plt.title('Number of End Times in Each Chunk')
-        # plt.show()
 
         print(f"Plotted {algorithm}")
 

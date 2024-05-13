@@ -1,4 +1,4 @@
-# OS2
+# OS2 (Light README)
 
 ## Description
 
